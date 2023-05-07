@@ -17,11 +17,15 @@ public class UserController {
         System.out.println(newUser.getPassword());
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
-    public void signout() {
-        System.out.println("sign up attempt");
+    public void signout(@RequestBody User newUser) {
+        System.out.println("sign up attempt:");
+        System.out.println(newUser.getEmail());
+        System.out.println(newUser.getPassword());
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/logout")
     public void logout() {
         System.out.println("logout user");
