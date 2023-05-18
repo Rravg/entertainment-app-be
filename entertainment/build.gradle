@@ -18,7 +18,9 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.6'
 	testImplementation 'org.apache.httpcomponents.client5:httpclient5'
-	testImplementation 'com.h2database:h2:2.1.214'
+	implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
+
+	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.0.2'
 }
 
 tasks.named('test') {

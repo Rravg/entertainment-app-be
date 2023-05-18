@@ -1,6 +1,11 @@
 package com.project.entertainment;
 
+import java.security.SecureRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,29 +20,63 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public void login(@RequestBody User user) {
+    ResponseEntity<String> login(@RequestBody User user) {
         System.out.println("login attempt with new User:");
-        System.out.println(user.getEmail());
-        System.out.println(user.getPassword());
-        System.out.println("");
 
-        User foundUser = userRepository.findByEmail(user.getEmail());
+        // Get data
+        String userEmail = user.getEmail();
+        String userPassword = user.getPassword();
 
-        System.out.println(foundUser.getEmail());
-        System.out.println(foundUser.getPassword());
+        // Check if email exists in database
+        if (userRepository.existsByEmail(userEmail)) {
+            // Get user and compare passwords
+            User foundUser = userRepository.findByEmail(userEmail);
+            String encodedPassword = foundUser.getPassword();
 
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
+
+            // Check if password match
+            if (encoder.matches(userPassword, encodedPassword)) {
+                // Send Ok response
+                // return ResponseEntity.ok().body("Logging in");
+                return new ResponseEntity<>("Logging in", HttpStatus.OK);
+
+            } else {
+                // Bad response check credentials
+                return new ResponseEntity<>("Incorrect credentials", HttpStatus.BAD_REQUEST);
+            }
+
+        } else {
+            // Bad response check credentials
+            return new ResponseEntity<>("Incorrect credentials", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
-    public void signout(@RequestBody User user) {
-        System.out.println("Sign Up user with new User:");
+    ResponseEntity<String> signup(@RequestBody User user) {
+        // Get data
+        String userEmail = user.getEmail();
+        String userPassword = user.getPassword();
 
-        User newUser = new User();
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(user.getPassword());
+        // Check if User already exists
+        if (userRepository.existsByEmail(userEmail)) {
+            // If email found, send bad response
+            return new ResponseEntity<>("User ealready exists", HttpStatus.BAD_REQUEST);
 
-        userRepository.save(newUser);
+        } else {
+            // Hash Password
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
+            String encodedPassword = encoder.encode(userPassword);
+
+            // Saves user
+            User newUser = new User(userEmail, encodedPassword);
+            userRepository.save(newUser);
+
+            // Notify user account has been created
+            return new ResponseEntity<>("New account created", HttpStatus.OK);
+        }
+
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -50,7 +89,12 @@ public class UserController {
     @GetMapping("/getall")
     public void getAll() {
         System.out.println("---> get all mapping found: ");
-        System.out.println(userRepository);
+        for (User user : userRepository.findAll()) {
+            System.out.println(user.getId());
+            System.out.println(user.getEmail());
+            System.out.println(user.getPassword());
+            System.out.println("----------------------");
+        }
     }
 
 }
