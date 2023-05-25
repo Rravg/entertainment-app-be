@@ -1,0 +1,14 @@
+{
+    "properties": [
+        {
+            "name": "admin.user",
+            "type": "java.lang.String",
+            "description": "Stores the admin email information on database"
+        },
+        {
+            "name": "admin.password",
+            "type": "java.lang.String",
+            "description": "Stores the admin password 'admin.user'"
+        }
+    ]
+}

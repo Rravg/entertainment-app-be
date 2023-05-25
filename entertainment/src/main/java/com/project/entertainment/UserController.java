@@ -21,8 +21,6 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
     ResponseEntity<String> login(@RequestBody User user) {
-        System.out.println("login attempt with new User:");
-
         // Get data
         String userEmail = user.getEmail();
         String userPassword = user.getPassword();
@@ -38,7 +36,6 @@ public class UserController {
             // Check if password match
             if (encoder.matches(userPassword, encodedPassword)) {
                 // Send Ok response
-                // return ResponseEntity.ok().body("Logging in");
                 return new ResponseEntity<>("Logging in", HttpStatus.OK);
 
             } else {
@@ -82,7 +79,6 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/logout")
     public void logout() {
-        System.out.println("logout user");
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
