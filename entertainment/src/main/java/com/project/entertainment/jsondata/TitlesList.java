@@ -1,4 +1,4 @@
-package com.project.entertainment;
+package com.project.entertainment.jsondata;
 
 import java.util.List;
 
@@ -14,7 +14,12 @@ public class TitlesList {
         this.titles = titles;
     }
 
+    // Getter and setters for titles
     public List<Title> getTitles() {
-        return titles;
+        return this.titles;
+    }
+
+    public void setTitles(List<Title> titles) {
+        this.titles = titles;
     }
 }
