@@ -1,5 +1,7 @@
 package com.project.entertainment.jsondata;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Title {
 
     private String title;
@@ -7,7 +9,11 @@ public class Title {
     private int year;
     private String category;
     private String rating;
+
+    @JsonProperty("isBookmarked")
     private boolean bookmarked;
+
+    @JsonProperty("isTrending")
     private boolean trending;
 
     // Default constructor
@@ -67,7 +73,7 @@ public class Title {
         this.rating = rating;
     }
 
-    public boolean isBookmarked() {
+    public boolean getBookmarked() {
         return this.bookmarked;
     }
 
@@ -75,7 +81,7 @@ public class Title {
         this.bookmarked = bookmarked;
     }
 
-    public boolean isTrending() {
+    public boolean getTrending() {
         return this.trending;
     }
 
