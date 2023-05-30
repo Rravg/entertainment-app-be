@@ -1,9 +1,14 @@
 package com.project.entertainment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,6 +29,9 @@ public class Titles {
     private String regularSmall;
     private String regularMedium;
     private String regularLarge;
+
+    @OneToMany(mappedBy = "titles", cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     Titles() {
     }
