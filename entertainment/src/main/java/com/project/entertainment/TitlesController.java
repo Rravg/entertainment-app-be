@@ -26,4 +26,18 @@ public class TitlesController {
 
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/trending")
+    ResponseEntity<List<Titles>> trending() {
+        List<Titles> titles = new ArrayList<>();
+        List<Titles> allTitles = titlesRepository.findAll();
+        for (Titles title : allTitles) {
+            if (title.getIsTrending()) {
+                titles.add(title);
+            }
+        }
+
+        return new ResponseEntity<>(titles, HttpStatus.OK);
+    }
 }
