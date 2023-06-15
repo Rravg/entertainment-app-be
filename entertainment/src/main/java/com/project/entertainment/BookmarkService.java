@@ -29,4 +29,13 @@ public class BookmarkService {
     public List<Bookmark> getBookmarksByUser(User user) {
         return bookmarkRepository.findByUser(user);
     }
+
+    public boolean checkBookmarkExists(User user, Titles title) {
+        return bookmarkRepository.existsByUserAndTitles(user, title);
+    }
+
+    public Long getBookmardId(User user, Titles title) {
+        Bookmark bookmark = bookmarkRepository.findByUserAndTitles(user, title);
+        return bookmark.getId();
+    }
 }
