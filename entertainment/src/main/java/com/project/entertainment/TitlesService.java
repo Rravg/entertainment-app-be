@@ -25,12 +25,12 @@ public class TitlesService {
         this.bookmarkService = bookmarkService;
     }
 
-    public List<Title> getCompleteTitlesByUser(User user) {
+    public List<Title> getCompleteTitlesByUser(User user, boolean trend) {
         List<Title> titles = new ArrayList<>();
         List<Titles> allTitles = titlesRepository.findAll();
 
         for (Titles title : allTitles) {
-            if (title.getIsTrending()) {
+            if (title.getIsTrending() == trend) {
                 // Check if title is bookmarked
                 boolean isBoomarked = bookmarkService.checkBookmarkExists(user,
                         titlesRepository.findByName(title.getName()));

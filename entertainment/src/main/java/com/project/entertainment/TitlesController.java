@@ -19,24 +19,25 @@ import com.project.entertainment.jsondata.Title;
 public class TitlesController {
 
     @Autowired
-    private TitlesRepository titlesRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private TitlesService titlesService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/titles")
-    ResponseEntity<List<Titles>> all() {
-        List<Titles> titles = new ArrayList<>();
-        titles.addAll(titlesRepository.findAll());
+    @CrossOrigin
+    @PutMapping("/titles")
+    ResponseEntity<List<Title>> all(@RequestBody Map<String, Object> requestBody) {
+        // Deserialize email
+        String email = (String) requestBody.get("email");
+        User user = userRepository.findByEmail(email);
+
+        List<Title> titles = new ArrayList<>();
+        titles = titlesService.getCompleteTitlesByUser(user, false);
 
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin
     @PutMapping("/trending")
     ResponseEntity<List<Title>> trending(@RequestBody Map<String, Object> requestBody) {
         // Deserialize email
@@ -44,8 +45,8 @@ public class TitlesController {
         User user = userRepository.findByEmail(email);
 
         List<Title> titles = new ArrayList<>();
-        titles = titlesService.getCompleteTitlesByUser(user);
-        
+        titles = titlesService.getCompleteTitlesByUser(user, true);
+
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
 }

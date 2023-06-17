@@ -42,7 +42,6 @@ public class Bookmark {
     public void setTitles(Titles titles) {
         this.titles = titles;
     }
-
     public Long getId() {
         return this.id;
     }
