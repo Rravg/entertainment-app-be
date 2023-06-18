@@ -25,28 +25,34 @@ public class TitlesService {
         this.bookmarkService = bookmarkService;
     }
 
-    public List<Title> getCompleteTitlesByUser(User user, boolean trend) {
+    public List<Title> getCompleteTitlesByUser(User user) {
         List<Title> titles = new ArrayList<>();
         List<Titles> allTitles = titlesRepository.findAll();
 
         for (Titles title : allTitles) {
-            if (title.getIsTrending() == trend) {
-                // Check if title is bookmarked
-                boolean isBoomarked = bookmarkService.checkBookmarkExists(user,
-                        titlesRepository.findByName(title.getName()));
 
-                // Creates title and adds it to the list
-                Trending trending = new Trending(title.getTrendingSmall(), title.getTrendingLarge());
-                Regular regular = new Regular(title.getRegularSmall(), title.getRegularMedium(),
-                        title.getRegularLarge());
+            // Check if title is bookmarked
+            boolean isBoomarked = bookmarkService.checkBookmarkExists(user,
+                    titlesRepository.findByName(title.getName()));
 
-                Thumbnail thumbnail = new Thumbnail(trending, regular);
+            // Creates title and adds it to the list
+            Trending trending = new Trending(title.getTrendingSmall(), title.getTrendingLarge());
+            Regular regular = new Regular(title.getRegularSmall(), title.getRegularMedium(),
+                    title.getRegularLarge());
 
-                titles.add(new Title(title.getName(), thumbnail, (int) title.getYear(), title.getCategory(),
-                        title.getRating(),
-                        isBoomarked, title.getIsTrending()));
-            }
+            Thumbnail thumbnail = new Thumbnail(trending, regular);
+
+            titles.add(new Title(title.getName(), thumbnail, (int) title.getYear(), title.getCategory(),
+                    title.getRating(),
+                    isBoomarked, title.getIsTrending()));
+
         }
+
+        return titles;
+    }
+
+    public List<Titles> searchTitles(String keyword) {
+        List<Titles> titles = titlesRepository.findByNameContaining(keyword);
 
         return titles;
     }

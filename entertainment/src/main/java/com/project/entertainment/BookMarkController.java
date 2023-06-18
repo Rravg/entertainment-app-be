@@ -53,7 +53,7 @@ public class BookMarkController {
         }
 
         List<Title> titles = new ArrayList<>();
-        titles = titlesService.getCompleteTitlesByUser(user, title.getIsTrending());
+        titles = titlesService.getCompleteTitlesByUser(user);
 
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }

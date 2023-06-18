@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,20 +31,7 @@ public class TitlesController {
         User user = userRepository.findByEmail(email);
 
         List<Title> titles = new ArrayList<>();
-        titles = titlesService.getCompleteTitlesByUser(user, false);
-
-        return new ResponseEntity<>(titles, HttpStatus.OK);
-    }
-
-    @CrossOrigin
-    @PutMapping("/trending")
-    ResponseEntity<List<Title>> trending(@RequestBody Map<String, Object> requestBody) {
-        // Deserialize email
-        String email = (String) requestBody.get("email");
-        User user = userRepository.findByEmail(email);
-
-        List<Title> titles = new ArrayList<>();
-        titles = titlesService.getCompleteTitlesByUser(user, true);
+        titles = titlesService.getCompleteTitlesByUser(user);
 
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
