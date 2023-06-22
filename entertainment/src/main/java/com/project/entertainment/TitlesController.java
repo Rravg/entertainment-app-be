@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.entertainment.jsondata.Title;
@@ -32,6 +33,22 @@ public class TitlesController {
 
         List<Title> titles = new ArrayList<>();
         titles = titlesService.getCompleteTitlesByUser(user);
+
+        return new ResponseEntity<>(titles, HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PutMapping("/search")
+    ResponseEntity<List<Title>> search(@RequestParam("search") String keyword,
+            @RequestBody Map<String, Object> requestBody) {
+
+        // Deserialize email
+        String email = (String) requestBody.get("email");
+        User user = userRepository.findByEmail(email);
+
+        List<Title> titles = new ArrayList<>();
+        List<Titles> foundTitles = titlesService.searchTitles(keyword);
+        titles = titlesService.convertToTitleResponse(foundTitles, user);
 
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }

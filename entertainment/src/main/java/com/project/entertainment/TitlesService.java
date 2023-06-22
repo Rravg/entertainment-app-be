@@ -45,14 +45,37 @@ public class TitlesService {
             titles.add(new Title(title.getName(), thumbnail, (int) title.getYear(), title.getCategory(),
                     title.getRating(),
                     isBoomarked, title.getIsTrending()));
+        }
 
+        return titles;
+    }
+
+    public List<Title> convertToTitleResponse(List<Titles> allTitles, User user) {
+        List<Title> titles = new ArrayList<>();
+
+        for (Titles title : allTitles) {
+
+            // Check if title is bookmarked
+            boolean isBoomarked = bookmarkService.checkBookmarkExists(user,
+                    titlesRepository.findByName(title.getName()));
+
+            // Creates title and adds it to the list
+            Trending trending = new Trending(title.getTrendingSmall(), title.getTrendingLarge());
+            Regular regular = new Regular(title.getRegularSmall(), title.getRegularMedium(),
+                    title.getRegularLarge());
+
+            Thumbnail thumbnail = new Thumbnail(trending, regular);
+
+            titles.add(new Title(title.getName(), thumbnail, (int) title.getYear(), title.getCategory(),
+                    title.getRating(),
+                    isBoomarked, title.getIsTrending()));
         }
 
         return titles;
     }
 
     public List<Titles> searchTitles(String keyword) {
-        List<Titles> titles = titlesRepository.findByNameContaining(keyword);
+        List<Titles> titles = titlesRepository.findByNameContainingIgnoreCase(keyword);
 
         return titles;
     }
